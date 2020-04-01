@@ -6,4 +6,9 @@ defmodule CommandBuckets.WriteSide.Router do
     to: BucketAggregate,
     identity: :bucket_name
   )
+
+  dispatch(BucketAggregate.SetInBucket,
+    to: BucketAggregate,
+    identity: :bucket_name
+  )
 end
