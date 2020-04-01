@@ -5,4 +5,6 @@ defmodule CommandBuckets.WriteSide.CommandedApplication do
       adapter: Commanded.EventStore.Adapters.EventStore,
       event_store: CommandBuckets.WriteSide.EventStore
     ]
+
+  router(CommandBuckets.WriteSide.Router)
 end
