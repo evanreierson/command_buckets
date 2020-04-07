@@ -13,21 +13,22 @@ defmodule CommandBuckets.WriteSide.BucketAggregate do
     defstruct [:bucket_name]
   end
 
-  # Set  in bucket command and event
+  # Set in bucket command and event
   defmodule SetInBucket do
     @enforce_keys [:bucket_name, :key, :value]
     defstruct [:bucket_name, :key, :value]
   end
 
   defmodule WasSetInBucket do
+    # @derive allows :jason to serialize our events for database storage
     @derive Jason.Encoder
     @enforce_keys [:bucket_name, :key, :value]
     defstruct [:bucket_name, :key, :value]
   end
 
-  # Bucket aggregate
-  @enforce_keys [:bucket_name, :bucket_contents]
-  defstruct [:bucket_name, :bucket_contents]
+  # Struct to hold each aggregate instance's state
+  @enforce_keys [:bucket_name]
+  defstruct [:bucket_name]
 
   # Matches when an aggregate with the bucket name does not already exist
   # and the provided bucket name is a string
@@ -88,10 +89,10 @@ defmodule CommandBuckets.WriteSide.BucketAggregate do
 
   # Updates the aggregate so uniqueness can be checked in execute/2
   def apply(
-        %BucketAggregate{} = aggregate_state,
+        %BucketAggregate{},
         %BucketCreated{bucket_name: bucket_name}
       ) do
-    %BucketAggregate{aggregate_state | bucket_name: bucket_name}
+    %BucketAggregate{bucket_name: bucket_name}
   end
 
   # Doesn't change the aggregate state for a WasPutInBucket event
